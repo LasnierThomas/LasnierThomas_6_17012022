@@ -26,7 +26,7 @@ app.use((req, res, next) => {
 app.use(cors());
 app.use(bodyParser.json());
 app.use('/api/auth', userRoutes);
-app.use('/sauces', saucesRoutes);
+app.use('/api/sauces', saucesRoutes);
 
 
 module.exports = app;
