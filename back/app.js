@@ -1,16 +1,18 @@
 const express = require('express');
+const cors = require('cors');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 
+const saucesRoutes = require('./routes/sauces');
 const userRoutes = require('./routes/user');
 
-mongoose.connect('mongodb+srv://thomas71:Azerty@cluster0.lomnu.mongodb.net/myFirstDatabase?retryWrites=true&w=majority',
+mongoose.connect('mongodb+srv://thomas71:Azerty@hotsauce.lvjsx.mongodb.net',
   {
     useNewUrlParser: true,
     useUnifiedTopology: true
   })
   .then(() => console.log('Connexion à MongoDB réussie !'))
-  .catch(() => console.log('Connexion à MongoDB échouée !'));
+  .catch((err) => console.log('Connexion à MongoDB échouée !', err));
 
 const app = express();
 
@@ -21,7 +23,10 @@ app.use((req, res, next) => {
   next();
 });
 
+app.use(cors());
 app.use(bodyParser.json());
+app.use('/api/auth', userRoutes);
+app.use('/sauces', saucesRoutes);
 
 
 module.exports = app;
