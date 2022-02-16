@@ -1,5 +1,6 @@
 const hotSauce = require('../models/hotSauce');
 const fs = require('fs');
+const { stringify } = require('querystring');
 
 exports.getAllhotSauce = (req, res, next) => {
     hotSauce.find()
