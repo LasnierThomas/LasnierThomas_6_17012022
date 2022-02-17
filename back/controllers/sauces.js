@@ -1,6 +1,6 @@
 const hotSauce = require('../models/hotSauce');
 const fs = require('fs');
-const { stringify } = require('querystring');
+
 
 exports.getAllhotSauce = (req, res, next) => {
     hotSauce.find()
@@ -75,8 +75,6 @@ exports.like = (req, res, next) => {
     hotSauce.findOne({ _id: req.params.id })
         .then((object) => {
             if (!object.usersLiked.includes(req.body.userId) && req.body.like === 1) {
-                
-
                 hotSauce.updateOne(
                     { _id: req.params.id },
                     {
@@ -85,8 +83,7 @@ exports.like = (req, res, next) => {
                     }
                 )
                     .then(() => res.status(201).json({ message: 'userLike + 1' }))
-                    .catch(error => res.status(400).json({ error }));
-                    
+                    .catch(error => res.status(400).json({ error }));    
             };
 
             if (object.usersLiked.includes(req.body.userId) && req.body.like === 0) {
@@ -103,7 +100,6 @@ exports.like = (req, res, next) => {
             };
 
             if (!object.usersDisliked.includes(req.body.userId) && req.body.like === -1) {
-
                 hotSauce.updateOne(
                     { _id: req.params.id },
                     {
@@ -112,12 +108,10 @@ exports.like = (req, res, next) => {
                     }
                 )
                     .then(() => res.status(201).json({ message: 'userDislike + 1 '}))
-                    .catch(error => res.status(400).json({ error }));
-                    
+                    .catch(error => res.status(400).json({ error }));      
             };
             
             if (object.usersDisliked.includes(req.body.userId) && req.body.like === 0) {
-
                 hotSauce.updateOne(
                     { _id: req.params.id },
                     {
@@ -129,6 +123,5 @@ exports.like = (req, res, next) => {
                     .catch(error => res.status(400).json({ error }));
             };
         })
-        .catch(error => res.status(400).json({ error }));
-        
+        .catch(error => res.status(400).json({ error }));       
 };
