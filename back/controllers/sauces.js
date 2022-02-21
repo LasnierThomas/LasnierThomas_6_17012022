@@ -37,10 +37,9 @@ exports.modifyhotSauce = (req, res, next) => {
             ...JSON.parse(req.body.sauce),
             imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
         } : { ...req.body };
-
-    hotSauce.updateOne({ _id: req.params.id }, { ...hotSauceObject, _id: req.params.id })
-        .then(() => res.status(200).json({ message: 'Objet modifié' }))
-        .catch(error => res.status(400).json({ error }));
+        hotSauce.updateOne({ _id: req.params.id }, { ...hotSauceObject, _id: req.params.id })
+            .then(() => res.status(200).json({ message: 'Objet modifié' }))
+            .catch(error => res.status(400).json({ error }));
 };
 
 exports.deletehotSauce = (req, res, next) => {
@@ -59,8 +58,8 @@ exports.deletehotSauce = (req, res, next) => {
         (newSauce) => {
             if (!newSauce) {
                 return res.status(404).json({
-                    error: new error( 'Objet non trouvé')
-                });    
+                    error: new error('Objet non trouvé')
+                });
             }
             if (newSauce.userId !== req.auth.userId) {
                 return res.status(401).json({
@@ -72,19 +71,19 @@ exports.deletehotSauce = (req, res, next) => {
 };
 
 exports.like = (req, res, next) => {
-    
+
     hotSauce.findOne({ _id: req.params.id })
         .then((object) => {
             if (!object.usersLiked.includes(req.body.userId) && req.body.like === 1) {
                 hotSauce.updateOne(
                     { _id: req.params.id },
                     {
-                        $inc: { likes: 1 }, 
+                        $inc: { likes: 1 },
                         $push: { usersLiked: req.body.userId }
                     }
                 )
                     .then(() => res.status(201).json({ message: 'userLike + 1' }))
-                    .catch(error => res.status(400).json({ error }));    
+                    .catch(error => res.status(400).json({ error }));
             };
 
             if (object.usersLiked.includes(req.body.userId) && req.body.like === 0) {
@@ -108,10 +107,10 @@ exports.like = (req, res, next) => {
                         $push: { usersDisliked: req.body.userId }
                     }
                 )
-                    .then(() => res.status(201).json({ message: 'userDislike + 1 '}))
-                    .catch(error => res.status(400).json({ error }));      
+                    .then(() => res.status(201).json({ message: 'userDislike + 1 ' }))
+                    .catch(error => res.status(400).json({ error }));
             };
-            
+
             if (object.usersDisliked.includes(req.body.userId) && req.body.like === 0) {
                 hotSauce.updateOne(
                     { _id: req.params.id },
@@ -120,9 +119,9 @@ exports.like = (req, res, next) => {
                         $pull: { usersDisliked: req.body.userId }
                     }
                 )
-                    .then(() => res.status(201).json({ message: 'userDislike = 0 '}))
+                    .then(() => res.status(201).json({ message: 'userDislike = 0 ' }))
                     .catch(error => res.status(400).json({ error }));
             };
         })
-        .catch(error => res.status(400).json({ error }));       
+        .catch(error => res.status(400).json({ error }));
 };
