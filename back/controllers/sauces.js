@@ -1,5 +1,6 @@
 const hotSauce = require('../models/hotSauce');
 const fs = require('fs');
+const { receiveMessageOnPort } = require('worker_threads');
 
 
 exports.getAllhotSauce = (req, res, next) => {
@@ -33,11 +34,11 @@ exports.createhotSauce = (req, res, next) => {
 exports.modifyhotSauce = (req, res, next) => {
     const hotSauceObject = req.file ?
         {
-            ...JSON.parse(req.body.newSauce),
+            ...JSON.parse(req.body.sauce),
             imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
         } : { ...req.body };
 
-    hotSauce.updateOne({ _id: req.params.id }, { ...req.body, _id: req.params.id })
+    hotSauce.updateOne({ _id: req.params.id }, { ...hotSauceObject, _id: req.params.id })
         .then(() => res.status(200).json({ message: 'Objet modifié' }))
         .catch(error => res.status(400).json({ error }));
 };
